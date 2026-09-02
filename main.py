@@ -8,4 +8,8 @@ dados_array = np.array([[10, 20], [30, 40]])
 df = pd.DataFrame(dados_array, columns=["Coluna A", "Coluna B"])
 
 print("--- Meu primeiro DataFrame com Pandas e NumPy ---")
-print(df)
+
+if not df.empty:
+  print(df)
+else:
+  print("Nenhum dado encontrado.")
