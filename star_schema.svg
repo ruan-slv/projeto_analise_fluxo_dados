@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  DIAGRAMA DO MODELO MULTIDIMENSIONAL (STAR SCHEMA)
+  Data Warehouse — AdventureWorks (schema dw)
+  1 Fato (fct_vendas) + 7 Dimensões
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <rect width="1180" height="760" fill="#f8fafc"/>
+  <text x="590" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Modelo Multidimensional — Star Schema (Data Warehouse)</text>
+  <text x="590" y="56" text-anchor="middle" font-size="13" fill="#64748b">Base: AdventureWorks 2016 (OLTP) → PostgreSQL (DW) · Grão do fato: linha do pedido</text>
+
+  <!-- ============ FATO (centro) ============ -->
+  <g>
+    <rect x="430" y="300" width="320" height="232" rx="10" fill="#0f172a"/>
+    <text x="590" y="330" text-anchor="middle" font-size="18" font-weight="700" fill="#fff">fct_vendas</text>
+    <text x="590" y="350" text-anchor="middle" font-size="11" fill="#94a3b8">(FATO — transacional)</text>
+    <line x1="445" y1="360" x2="735" y2="360" stroke="#334155" stroke-width="1"/>
+    <g font-size="12" fill="#e2e8f0">
+      <text x="448" y="382">data_id        <tspan fill="#64748b">FK</tspan></text>
+      <text x="448" y="402">produto_id     <tspan fill="#64748b">FK</tspan></text>
+      <text x="448" y="422">cliente_id     <tspan fill="#64748b">FK</tspan></text>
+      <text x="448" y="442">vendedor_id    <tspan fill="#64748b">FK</tspan></text>
+      <text x="448" y="462">territorio_id  <tspan fill="#64748b">FK</tspan></text>
+      <text x="448" y="482">moeda_id       <tspan fill="#64748b">FK</tspan></text>
+      <text x="448" y="502">promocao_id    <tspan fill="#64748b">FK</tspan></text>
+      <text x="600" y="382">quantidade     <tspan fill="#f59e0b">medida</tspan></text>
+      <text x="600" y="402">preco_unit     <tspan fill="#f59e0b">medida</tspan></text>
+      <text x="600" y="422">desconto_unit  <tspan fill="#f59e0b">medida</tspan></text>
+      <text x="600" y="442">subtotal_linha <tspan fill="#f59e0b">medida</tspan></text>
+      <text x="600" y="462">total_pedido   <tspan fill="#f59e0b">medida</tspan></text>
+      <text x="600" y="482">taxas / frete  <tspan fill="#f59e0b">medida</tspan></text>
+      <text x="600" y="502">sales_order_id, line_id <tspan fill="#64748b">id OLTP</tspan></text>
+    </g>
+  </g>
+
+  <!-- ============ DIMENÇÕES ============ -->
+  <!-- dim_data (topo) -->
+  <g>
+    <rect x="450" y="80" width="280" height="120" rx="10" fill="#ffffff" stroke="#0ea5e9" stroke-width="2"/>
+    <text x="590" y="106" text-anchor="middle" font-size="16" font-weight="700" fill="#0369a1">dim_data</text>
+    <g font-size="12" fill="#334155">
+      <text x="465" y="130">data_id <tspan fill="#94a3b8">PK</tspan>   ·  data <tspan fill="#94a3b8">UK</tspan></text>
+      <text x="465" y="150">ano · trimestre · mes · semestre</text>
+      <text x="465" y="170">dia_semana · semana_ano · fim_de_semana</text>
+      <text x="465" y="190">mes_nome · dia_do_ano · flag_mes</text>
+    </g>
+  </g>
+
+  <!-- dim_produto (esq) -->
+  <g>
+    <rect x="60" y="250" width="300" height="150" rx="10" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+    <text x="210" y="276" text-anchor="middle" font-size="16" font-weight="700" fill="#047857">dim_produto</text>
+    <g font-size="12" fill="#334155">
+      <text x="75" y="300">produto_id <tspan fill="#94a3b8">PK</tspan> · product_oltp_id <tspan fill="#94a3b8">UK</tspan></text>
+      <text x="75" y="320">nome · numero · cor · tamanho · classe</text>
+      <text x="75" y="340">estilo · fabrica · peso</text>
+      <text x="75" y="360">custo_padrao · preco_lista</text>
+      <text x="75" y="380">subcategoria_id · categoria_id · nomes</text>
+    </g>
+  </g>
+
+  <!-- dim_cliente (dir) -->
+  <g>
+    <rect x="820" y="250" width="300" height="150" rx="10" fill="#ffffff" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="970" y="276" text-anchor="middle" font-size="16" font-weight="700" fill="#6d28d9">dim_cliente</text>
+    <g font-size="12" fill="#334155">
+      <text x="835" y="300">cliente_id <tspan fill="#94a3b8">PK</tspan> · customer_oltp_id <tspan fill="#94a3b8">UK</tspan></text>
+      <text x="835" y="320">tipo_cliente · nome · sobrenome</text>
+      <text x="835" y="340">titulo · email_promocao</text>
+      <text x="835" y="360">loja_nome · account_number</text>
+      <text x="835" y="380">territorio_id <tspan fill="#94a3b8">FK</tspan></text>
+    </g>
+  </g>
+
+  <!-- dim_vendedor (baixo esq) -->
+  <g>
+    <rect x="60" y="520" width="300" height="150" rx="10" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+    <text x="210" y="546" text-anchor="middle" font-size="16" font-weight="700" fill="#b45309">dim_vendedor</text>
+    <g font-size="12" fill="#334155">
+      <text x="75" y="570">vendedor_id <tspan fill="#94a3b8">PK</tspan> · salesperson_oltp <tspan fill="#94a3b8">UK</tspan></text>
+      <text x="75" y="590">nome · cargo</text>
+      <text x="75" y="610">quota · bonus · comissao</text>
+      <text x="75" y="630">territorio_id <tspan fill="#94a3b8">FK</tspan></text>
+    </g>
+  </g>
+
+  <!-- dim_territorio (baixo centro) -->
+  <g>
+    <rect x="450" y="540" width="280" height="150" rx="10" fill="#ffffff" stroke="#ef4444" stroke-width="2"/>
+    <text x="590" y="566" text-anchor="middle" font-size="16" font-weight="700" fill="#b91c1c">dim_territorio</text>
+    <g font-size="12" fill="#334155">
+      <text x="465" y="590">territory_id <tspan fill="#94a3b8">PK</tspan> · territory_oltp_id <tspan fill="#94a3b8">UK</tspan></text>
+      <text x="465" y="610">nome · grupo · codigo_pais · nome_pais</text>
+      <text x="465" y="630">codigo_estado · nome_estado</text>
+      <text x="465" y="650">vendas_ano · vendas_ano_ant · custos</text>
+    </g>
+  </g>
+
+  <!-- dim_moeda (baixo dir) -->
+  <g>
+    <rect x="820" y="520" width="300" height="150" rx="10" fill="#ffffff" stroke="#06b6d4" stroke-width="2"/>
+    <text x="970" y="546" text-anchor="middle" font-size="16" font-weight="700" fill="#0e7490">dim_moeda</text>
+    <g font-size="12" fill="#334155">
+      <text x="835" y="570">moeda_id <tspan fill="#94a3b8">PK</tspan> · currency_code <tspan fill="#94a3b8">UK</tspan></text>
+      <text x="835" y="590">nome_moeda</text>
+      <text x="835" y="610">taxa_media · taxa_fim_dia</text>
+    </g>
+  </g>
+
+  <!-- dim_promocao (dir, acima do cliente) -->
+  <g>
+    <rect x="820" y="80" width="300" height="140" rx="10" fill="#ffffff" stroke="#ec4899" stroke-width="2"/>
+    <text x="970" y="106" text-anchor="middle" font-size="16" font-weight="700" fill="#be185d">dim_promocao</text>
+    <g font-size="12" fill="#334155">
+      <text x="835" y="130">promocao_id <tspan fill="#94a3b8">PK</tspan> · specialoffer_oltp <tspan fill="#94a3b8">UK</tspan></text>
+      <text x="835" y="150">descricao · tipo · categoria</text>
+      <text x="835" y="170">desconto_pct · qty_minima · qty_maxima</text>
+      <text x="835" y="190">dt_inicio · dt_fim</text>
+    </g>
+  </g>
+
+  <!-- ============ ARESTAS (FK dim -> fato) ============ -->
+  <g stroke="#64748b" stroke-width="2" fill="none" marker-end="url(#arr)">
+    <line x1="590" y1="200" x2="590" y2="300"/>              <!-- data -->
+    <line x1="360" y1="325" x2="430" y2="345"/>              <!-- produto -->
+    <line x1="820" y1="325" x2="750" y2="345"/>              <!-- cliente -->
+    <line x1="360" y1="595" x2="430" y2="470"/>              <!-- vendedor -->
+    <line x1="590" y1="540" x2="590" y2="534"/>              <!-- territorio -->
+    <line x1="820" y1="595" x2="750" y2="470"/>              <!-- moeda -->
+    <line x1="820" y1="150" x2="750" y2="320"/>              <!-- promocao -->
+  </g>
+
+  <!-- Legenda -->
+  <g font-size="11" fill="#64748b">
+    <rect x="40" y="700" width="14" height="14" fill="#0f172a"/>
+    <text x="60" y="711">Fato</text>
+    <rect x="110" y="700" width="14" height="14" fill="#fff" stroke="#0ea5e9" stroke-width="2"/>
+    <text x="130" y="711">Dimensão</text>
+    <line x1="210" y1="707" x2="240" y2="707" stroke="#64748b" stroke-width="2" marker-end="url(#arr)"/>
+    <text x="248" y="711">Relacionamento (FK)</text>
+    <text x="360" y="711">PK = chave primária · UK = única · FK = estrangeira · medida = fato numérico</text>
+  </g>
+</svg>

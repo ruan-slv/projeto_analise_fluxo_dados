@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Segredos / ambiente local
+.env
+*.local
+
+# Instância PostgreSQL local (fora do repo, em ~/pgsql-*)
+pgsql-data/
+pg.log
+
+# IDE / SO
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Artefatos de build
+build/
+dist/

@@ -1,0 +1,91 @@
+@startuml Star Schema - AdventureWorks DW
+' Modelo multidimensional (Star Schema) do Data Warehouse
+' 1 fato (fct_vendas) + 7 dimensões — grão: linha do pedido
+skinparam rectangle {
+  RoundCorner 10
+}
+skinparam linetype ortho
+
+rectangle "dim_data" as data {
+  data_id .. "PK"
+  data
+  ano / trimestre / mes / semestre
+  dia_semana / semana_ano / fim_de_semana
+}
+
+rectangle "dim_produto" as prod {
+  produto_id .. "PK"
+  product_oltp_id .. "UK"
+  nome / numero / cor / tamanho / classe
+  estilo / fabrica / peso
+  custo_padrao / preco_lista
+  subcategoria_id / categoria_id
+}
+
+rectangle "dim_cliente" as cli {
+  cliente_id .. "PK"
+  customer_oltp_id .. "UK"
+  tipo_cliente / nome / sobrenome
+  titulo / email_promocao / loja_nome
+  territorio_id .. "FK"
+}
+
+rectangle "dim_vendedor" as ven {
+  vendedor_id .. "PK"
+  salesperson_oltp .. "UK"
+  nome / cargo
+  quota / bonus / comissao
+  territorio_id .. "FK"
+}
+
+rectangle "dim_territorio" as terr {
+  territory_id .. "PK"
+  territory_oltp_id .. "UK"
+  nome / grupo / codigo_pais / nome_pais
+  codigo_estado / nome_estado
+  vendas_ano / vendas_ano_ant / custos
+}
+
+rectangle "dim_moeda" as moed {
+  moeda_id .. "PK"
+  currency_code .. "UK"
+  nome_moeda
+  taxa_media / taxa_fim_dia
+}
+
+rectangle "dim_promocao" as promo {
+  promocao_id .. "PK"
+  specialoffer_oltp .. "UK"
+  descricao / tipo / categoria
+  desconto_pct / qty_minima / qty_maxima
+  dt_inicio / dt_fim
+}
+
+rectangle "fct_vendas (FATO)" as fato {
+  data_id .. "FK"
+  produto_id .. "FK"
+  cliente_id .. "FK"
+  vendedor_id .. "FK"
+  territorio_id .. "FK"
+  moeda_id .. "FK"
+  promocao_id .. "FK"
+  -- medidas --
+  quantidade
+  preco_unit
+  desconto_unit
+  subtotal_linha
+  total_pedido / taxas / frete
+  sales_order_id / line_id
+}
+
+data  --> fato
+prod  --> fato
+cli   --> fato
+ven   --> fato
+terr  --> fato
+moed  --> fato
+promo --> fato
+cli   ..> terr : "territorio_id (FK)"
+ven   ..> terr : "territorio_id (FK)"
+
+@enduml
