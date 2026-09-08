@@ -48,6 +48,84 @@ A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento e é não nulo.
 
 
 
+-----------
+BusinessEntity
+
+A coluna BusinessEntityID é do tipo int e possui 4 de comprimento e é não nulo.
+
+A coluna rowguid é do tipo uniqueidentifier tendo 16 de comprimento e não nulo.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento e não nulo.
+
+
+
+-----------
+BusinessEntityAddress
+
+A coluna BusinessEntityID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna AddressID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna AddressTypeID é do tipo int tendo 4 de comprimento e não nulo.
+
+A coluna rowguid é do tipo uniqueidentifier tendo 16 de comprimento não nulo.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento e não nulo.
+
+
+
+-----------
+BusinessEntityContact
+
+
+
+A coluna BusinessEntityID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna PersonID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna ContactTypeID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna rowguid é do tipo uniqueidentifier tendo 16 de comprimento não nulo.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
+
+
+
+-----------
+ContactType
+
+A coluna ContactTypeID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna Name é do tipo especial Name tendo 100 de comprimento não nulo.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
+
+
+
+-----------
+CountryRegion
+
+A coluna CountryRegionCode é do tipo nvarchar tendo 3 de comprimento não nulo.
+
+A coluna Name é do tipo especial Name tendo 100 de comprimento não nulo.
+
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
