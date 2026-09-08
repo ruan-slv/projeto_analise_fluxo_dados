@@ -1,0 +1,69 @@
+AdventureWorks
+==================
+Person
+======
+
+-------
+Address
+
+A coluna AddressID tem 4 de comprimento sendo do tipo int e não nulo.
+
+
+
+A coluna AddressLine1 é do tipo nvarchar tendo 60 de comprimento e não nulo.
+
+A coluna AddressLine2 é do tipo nvarchar tendo 60 de comprimento e permite nulo.
+
+A coluna City é do tipo nvarchar tendo 30 de comprimento e não nulo.
+
+A coluna StateProvinceID é do tipo int tendo 4 de comprimento e não nulo.
+
+
+A coluna PostalCode é do tipo nvarchar tendo 15 de comprimento e não nulo.
+
+
+
+A coluna SpatialLocation é do tipo geography tendo -1 de comprimento e permitindo nulo.
+
+
+A coluna rowguid é do tipo uniqueidentifier tendo 16 de comprimento e sendo não nulo.
+
+
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento e sendo não nulo.
+
+
+-----------
+AddressType
+
+A coluna AddressTypeID é do tipo int tendo 4 de comprimento e não nulo.
+
+
+A coluna Name é do tipo especial Name tendo 100 de comprimento e não nulo.
+
+
+A coluna rowguid é do tipo uniqueidentifier tendo 16 de comprimento e não nulo.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento e é não nulo.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
