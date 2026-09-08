@@ -1,0 +1,115 @@
+O AdventureWorks está estruturado para produção usando o OLTP otimizado para inserções, atualizações, remoções e consultas simples.
+
+Ao abrir o AdventureWorks no Dbeaver é possivel ver alguns Esquemas sendo a primeira a DBO que é mais para armazenamento de informações do sistema e logs.
+
+================================
+HumanResources(Recursos humanos)
+
+Possui algumas tabelas onde as mesmas serão listadas abaixo.
+
+----------------------------
+* Department(Departamento)
+Ela possui as colunas de DepartmentID onde ela é uma primary key e ela é do tipo smallint(int reduzido) e é não nula.
+
+Na coluna Name ela é não nulo e possui um comprimento de 100 caracteres e o tipo dela é personalizado tendo o tipo Name(nvarchar).
+
+Na coluna GroupName temos o tipo personalizado com a capacidade de 100 caracteres de armazenamento. Ela é não nulo
+
+Na coluna ModifiedDate ela é do tipo datetime e possui a capacidade de armazenar 8 caracteres e ela é não nulo.
+
+---------------------------
+* Employee(Funcionario)
+Na coluna BusinessEntityID ela é do tipo int com um comprimento de 4 caracteres e é não nulo.
+
+Na coluna NationalIDNumber possui o tipo nvarchar com a capacidade de armazenar 15 caracteres e é não nulo.
+
+Na coluna LoginID ela é não nula e possui o tipo nvarchar com a capacidade de armazenar 256 caracteres.
+
+A coluna organization node possui o tipo hierarchyid tendo a capacidade de armazenar 892 caracteres.
+
+Na coluna OrganizationLevel temos o tipo smallint tendo como comprimento 2 caracteres.
+
+Na coluna JobTitle temos o tipo nvarchar tendo como comprimento 50 caracteres e é não nulo.
+
+Na coluna BirthDate ela é não nulo e possui o comprimento de 3 caracteres sendo do tipo date.
+
+Na coluna MaritalStatus temos um tipo nchar com 1 de comprimento e não nulo.
+
+Na coluna Gender temos o tipo nchar com 1 de comprimento e não nulo.
+
+Na coluna HireDate temos o tipo date tendo como comprimento 3 caracteres e é não nulo.
+
+Na coluna SalariedFlag temos um tipo personalizado chamado Flag e possui 1 de comprimento sendo não nulo.
+
+
+Na coluna VacationHours temos o tipo smallint tendo o comprimento de 2 caracteres e é não nulo.
+
+A coluna SickLeaveHours possui o tipo smallint tendo o comprimento de 2 caracteres e é não nulo.
+
+A coluna CurrentFlag possui um tipo personalizado Flag tendo 1 de comprimento e sendo não nulo.
+
+Na coluna rowguid temos o tipo uniqueidentifier com 16 de comprimento e não nulo.
+
+Na coluna ModifiedDate temos o tipo datetime e 8 de comprimento sendo não nulo.
+
+
+---------------------------
+* EmployeeDepartmentHistory(Historico de departamento do empregado)
+
+Na coluna BusinessEntityID temos o tipo int com comprimento de 4 caracteres sendo não nulo.
+
+Na coluna DepartmentID temos o tipo smallint com o comprimento de 2 caracteres sendo não nulo.
+
+
+A coluna ShiftID é do tipo tinyint com 1 de comprimento e não nulo.
+
+Na coluna StartDate ela é não nulo e é do tipo date com 3 de comprimento.
+
+Na coluna EdnDate ela é do tipo date com 3 de comprimento sendo permitido o valor nulo.
+
+A coluna ModifiedDate é não nulo possuindo o tipo datetime com 8 de comprimento.
+
+
+---------------------------
+* EmployeePayHistory(Historico de pagamento do empregado)
+
+
+A coluna BusinessEntityID possui o tipo int com 4 de comprimento e é não nulo.
+
+A coluna RateChangeDate é não nulo e do tipo datetime com 8 de comprimento.
+
+
+A coluna Rate é do tipo money tendo a capacidade de armazenar 8 caracteres e é não nulo.
+
+A coluna PayFrequency é não nulo e do tipo tinyint tendo 1 de comprimento.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento e é não nulo.
+
+
+---------------------------
+* JobCandidate(Candidatos de trabalho)
+
+A coluna JobCandidateID é não nulo do tipo int tendo 4 de comprimento.
+
+A coluna BusinessEntityID é do tipo int dento 4 de comprimento e permite nulo.
+
+A coluna Resume é do tipo xml tendo -1 de comprimento e permite nulo.
+
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento e é não nulo.
+
+
+
+---------------------------
+* Shift(Turno de trabalho)
+
+A coluna ShiftID é do tipo tinyint tendo 1 de comprimento e é não nulo.
+
+A coluna Name é do tipo personalizado Name tendo 100 de comprimento e é não nulo.
+
+A coluna StartTime é do tipo time e tem 5 de comprimento e é não nulo.
+
+A coluna EndTime é do tipo time tendo 5 de comprimento e é não nulo.
+
+
+A coluna ModifiedDate é não nulo tendo o tipo datetime com 8 de comprimento.
