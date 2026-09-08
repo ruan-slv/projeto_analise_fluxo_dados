@@ -37,10 +37,10 @@ def main():
 
     # Passo 5: Restaurar o banco de dados (Query formatada em uma linha para evitar problemas de escape)
     restore_query = (
-        "RESTORE DATABASE AdventureWorksDW FROM DISK = '/var/opt/mssql/backup/AdventureWorksDW2025.bak' "
+        "RESTORE DATABASE AdventureWorks FROM DISK = '/var/opt/mssql/backup/AdventureWorks2025.bak' "
         "WITH REPLACE, "
-        "MOVE 'AdventureWorksDW' TO '/var/opt/mssql/data/AdventureWorksDW.mdf', "
-        "MOVE 'AdventureWorksDW_log' TO '/var/opt/mssql/data/AdventureWorksDW_log.ldf'"
+        "MOVE 'AdventureWorks' TO '/var/opt/mssql/data/AdventureWorks.mdf', "
+        "MOVE 'AdventureWorks_log' TO '/var/opt/mssql/data/AdventureWorks_log.ldf'"
     )
 
     restore_command = f'docker exec -i db_fluxo /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "AnaliseDados@2026!" -C -Q "{restore_query}"'
