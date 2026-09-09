@@ -114,20 +114,88 @@ A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
 
 
 
+-----------
+EmailAddress
+
+A coluna BusinessEntityId é do tipo int tendo 4 de comprimento não nulo.
+
+
+A coluna EmailAddressID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna EmailAddress é do tipo nvarchar tendo 50 de comprimento onde permite nulo.
 
 
 
+A coluna rowguid é do tipo uniqueidentifier tendo 16 de comprimento não nulo.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
 
 
+-----------
+Password
+
+A coluna BusinessEntityID é do tipo int tendo 4 de comprimento não nulo.
 
 
+A coluna PasswordHash é do tipo varchar tendo 128 de comprimento não nulo.
 
 
+A coluna PasswordSalt é do tipo varchar tendo 10 de comprimento não nulo.
 
 
+A coluna rowguid é do tipo uniqueidentifier tendo 16 de comprimento não nulo.
 
 
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
 
+
+-----------
+Person
+
+A coluna BusinessEntityId é do tipo int tendo 4 de comprimento não nulo.
+
+
+A coluna PersonType é do tipo nchar tendo 2 de comprimento não nulo.
+
+A coluna NameStyle é do tipo personalizado NameStyle tendo 1 de comprimento não nulo.
+
+A coluna Title é do tipo nvarchar tendo 8 de comprimento e permite nulo.
+
+
+A coluna FirstName é do tipo personalisado Name tendo 100 de comprimento não nulo.
+
+A coluna MiddleName é do tipo personalizado Name tendo 100 de comprimento e permite nulo.
+
+A coluna LastName é do tipo personalizado Name tendo 100 de comprimento não nulo.
+
+
+A coluna Suffix é do tipo nvarchar tendo 10 de comprimento e permite nulo.
+
+
+A coluna EmailPromotion é do tipo int tendo 4 de comprimento não nulo.
+
+
+A coluna AdditionalContactInfo é do tipo xml e possui -1 de comprimento sendo q permite nulo.
+
+A coluna Demographics é do tipo xml e possui o comprimento de -1 e permite valores nulos.
+
+A coluna rowguid possui o tipo uniqueidentifier tendo 16 de comprimento não nulo.
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
+
+
+-----------
+PersonPhone
+
+A coluna BusinessEntityID é do tipo int tendo 4 de comprimento não nulo.
+
+A coluna PhoneNumber é do tipo especial Phone tendo 50 de comprimento não nulo.
+
+
+A coluna PhoneNumberTypeID é do tipo int tendo 4 de comprimento não nulo.
+
+
+A coluna ModifiedDate é do tipo datetime tendo 8 de comprimento não nulo.
 
 
 
