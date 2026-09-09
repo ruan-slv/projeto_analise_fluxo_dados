@@ -1,10 +1,8 @@
 import subprocess
-import time
 import sys
 
 # Configurações de cores para o terminal (funciona no Windows, Linux e Mac)
 GREEN = "\033[0;32m"
-YELLOW = "\033[1;33m"
 NC = "\033[0m"
 
 def run_command(command, description):
@@ -19,35 +17,9 @@ def run_command(command, description):
 
 def main():
     # Passo 1: Construir a imagem Docker
-    run_command("docker build -t sql-analise-fluxo .", "Passo 1: Construindo a imagem Docker (sql-analise-fluxo)")
+    run_command("docker build -t sql-analise-fluxo .", "Construindo a imagem Docker (sql-analise-fluxo)")
 
-    # Passo 2: Limpar container antigo (ignora erros se o container não existir)
-    print(f"{GREEN}==> Passo 2: Limpando container antigo (se houver)...{NC}")
-    subprocess.run("docker rm -f db_fluxo", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-    # Passo 3: Subir o novo container
-    run_command(
-        'docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=AnaliseDados@2026!" -p 1433:1433 --name db_fluxo -d sql-analise-fluxo',
-        "Passo 3: Subindo o novo container (db_fluxo)"
-    )
-
-    # Passo 4: Aguardar o SQL Server inicializar
-    print(f"{YELLOW}==> Passo 4: Aguardando o motor do SQL Server inicializar (25 segundos)...{NC}")
-    time.sleep(25)
-
-    # Passo 5: Restaurar o banco de dados (Query formatada em uma linha para evitar problemas de escape)
-    restore_query = (
-        "RESTORE DATABASE AdventureWorks FROM DISK = '/var/opt/mssql/backup/AdventureWorks2025.bak' "
-        "WITH REPLACE, "
-        "MOVE 'AdventureWorks' TO '/var/opt/mssql/data/AdventureWorks.mdf', "
-        "MOVE 'AdventureWorks_log' TO '/var/opt/mssql/data/AdventureWorks_log.ldf'"
-    )
-
-    restore_command = f'docker exec -i db_fluxo /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "AnaliseDados@2026!" -C -Q "{restore_query}"'
-
-    run_command(restore_command, "Passo 5: Restaurando o banco de dados AdventureWorks")
-
-    print(f"{GREEN}==> Automação finalizada! O banco está pronto e seguro para conexões em localhost:1433.{NC}")
+    print(f"{GREEN}==> Imagem buildada com sucesso! Pronto para ser usada pelo Docker Compose.{NC}")
 
 if __name__ == "__main__":
     main()
