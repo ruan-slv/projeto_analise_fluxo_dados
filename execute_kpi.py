@@ -4,11 +4,9 @@ from pathlib import Path
 from sqlalchemy import create_engine, text, URL
 import pandas as pd
 
-# Garante compatibilidade UTF-8 no terminal Windows
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-# Cores para o terminal
 CYAN = "\033[96m"
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
@@ -17,7 +15,6 @@ RED = "\033[91m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
-# Configuração de Conexão com o DW (PostgreSQL)
 DATABASE_URL = URL.create(
     "postgresql+psycopg2",
     username="dw_admin",
@@ -28,7 +25,6 @@ DATABASE_URL = URL.create(
 )
 
 ARQUIVO_KPIS = Path(__file__).resolve().parent / "MapeamentoAdventureWorks" / "kpis.sql"
-
 
 def carregar_kpis():
     """Carrega dinamicamente os KPIs do arquivo kpis.sql."""
@@ -118,7 +114,6 @@ def exibir_menu(kpis):
 def main():
     kpis = carregar_kpis()
 
-    # Suporte a parâmetro via linha de comando: ex. `python execute_kpi.py 1` ou `all`
     if len(sys.argv) > 1:
         arg = sys.argv[1].lower().strip()
         engine = get_engine()
@@ -134,7 +129,6 @@ def main():
             print(f"{RED}Opção inválida: {arg}. Escolha um número entre 1 e 10, ou 'all'.{RESET}")
         return
 
-    # Modo interativo
     engine = get_engine()
     if not engine:
         sys.exit(1)

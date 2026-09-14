@@ -37,7 +37,6 @@ def upsert_table(df: pd.DataFrame, table: str, engine) -> None:
         SET {updates}
     """)
 
-    # Converte NaN em None para que o PostgreSQL receba NULL em vez de erro de tipo
     records = df.to_dict(orient="records")
     clean_records = [
         {k: (None if pd.isna(v) else v) for k, v in r.items()}
@@ -47,7 +46,6 @@ def upsert_table(df: pd.DataFrame, table: str, engine) -> None:
     with engine.begin() as conn:
         conn.execute(query, clean_records)
 
-        # Sincroniza a sequence do serial caso seja a tabela fato
         if table == "fhuman_resources":
             conn.execute(text("SELECT setval('fhuman_resources_fhumanresources_seq', COALESCE((SELECT MAX(fhumanresources) FROM fhuman_resources), 1))"))
 

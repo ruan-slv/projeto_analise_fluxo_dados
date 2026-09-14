@@ -1,16 +1,14 @@
 version: '3.8'
 
 services:
-  # --- NOSSO OLTP (SQL SERVER) ---
   oltp_sqlserver:
-    build: . # Vai ler o seu Dockerfile atual para buildar a imagem com o .bak
+    build: .
     container_name: db_oltp_fluxo
     ports:
       - "1433:1433"
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=AnaliseDados@2026!
-    # Executa o SQL Server e roda o comando de restore automaticamente lá dentro após 25s
     command: >
       bash -c "
       /opt/mssql/bin/sqlservr &
@@ -19,18 +17,17 @@ services:
       wait
       "
 
-  # --- NOSSO OLAP / DATA WAREHOUSE (POSTGRES) ---
   olap_postgres:
-    image: postgres:16-alpine # Imagem oficial do Postgres, super leve
+    image: postgres:16-alpine
     container_name: db_olap_dw
     ports:
-      - "5432:5432" # Porta padrão do Postgres
+      - "5432:5432"
     environment:
       - POSTGRES_USER=dw_admin
       - POSTGRES_PASSWORD=DataWarehouse@2026!
-      - POSTGRES_DB=dw_analise_fluxo # Nome do seu banco de Data Warehouse
+      - POSTGRES_DB=dw_analise_fluxo
     volumes:
-      - postgres_dw_data:/var/lib/postgresql/data # Garante que os dados do DW não sumam se o container parar
+      - postgres_dw_data:/var/lib/postgresql/data
 
 volumes:
-  postgres_dw_data: # Cria um volume persistente para o Postgres
+  postgres_dw_data:

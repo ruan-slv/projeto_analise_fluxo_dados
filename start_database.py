@@ -6,11 +6,6 @@ NC = "\033[0m"
 
 def main():
     print(f"{GREEN}==> Verificando e iniciando o ambiente de dados...{NC}")
-
-    # Tentamos dar o 'up -d'.
-    # Se os containers já existirem e estiverem parados, ele só liga (sem apagar dados).
-    # Se eles não existirem (após reiniciar a máquina/primeira vez), ele cria do zero.
-    # O '--build' garante que o SQL Server vai ler o seu Dockerfile se você mudá-lo.
     try:
         subprocess.run("docker compose up -d --build", shell=True, check=True)
         print(f"\n{GREEN}==> Ambiente online e atualizado!{NC}")
