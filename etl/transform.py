@@ -61,6 +61,9 @@ demployee.columns = [
     'OrganizationLevel', 'JobTitle', 'MaritalStatus', 'Gender',
     'BirthDate', 'HireDate', 'SalariedFlag', 'CurrentFlag'
 ]
+demployee['SalariedFlag'] = demployee['SalariedFlag'].astype(int)
+demployee['CurrentFlag'] = demployee['CurrentFlag'].astype(int)
+demployee['OrganizationLevel'] = demployee['OrganizationLevel'].astype('Int64')
 demployee.to_csv(caminho_pasta_data_transformado / "demployee.csv", index=False)
 
 # -------------------------
@@ -93,13 +96,14 @@ fhr = fhr.merge(djobcandidate_raw[['JobCandidateID', 'BusinessEntityID']], on='B
 fhr['DateID'] = pd.to_datetime(fhr['StartDate']).dt.strftime('%Y%m%d').astype(int)
 
 fhuman_resources = pd.DataFrame({
+    'FHumanResources': range(1, len(fhr) + 1),
     'DateID': fhr['DateID'],
     'TimeID': 1200,
     'DepartmentID': fhr['DepartmentID'],
     'EmployeeID': fhr['BusinessEntityID'],
     'PayHistoryID': fhr['PayHistoryID'],
     'ShiftID': fhr['ShiftID'],
-    'JobCandidateID': fhr['JobCandidateID'].fillna(0).astype(int),
+    'JobCandidateID': fhr['JobCandidateID'].astype('Int64'),
     'Rate': fhr['Rate'],
     'VacationHours': fhr['VacationHours'],
     'SickLeaveHours': fhr['SickLeaveHours']

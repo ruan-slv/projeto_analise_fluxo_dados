@@ -1,9 +1,16 @@
 from pathlib import Path
 import pandas as pd
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, URL
 from datetime import datetime
 
-DATABASE_CONNECTION = "postgresql+psycopg2://dw_admin:DataWarehouse@2026!@localhost:5432/dw_analise_fluxo"
+DATABASE_URL = URL.create(
+    "postgresql+psycopg2",
+    username="dw_admin",
+    password="DataWarehouse@2026!",
+    host="localhost",
+    port=5432,
+    database="dw_analise_fluxo"
+)
 
 PRIMARY_KEYS = {
     "ddate": "DateID",
@@ -30,9 +37,20 @@ def upsert_table(df: pd.DataFrame, table: str, engine) -> None:
         SET {updates}
     """)
 
+    # Converte NaN em None para que o PostgreSQL receba NULL em vez de erro de tipo
+    records = df.to_dict(orient="records")
+    clean_records = [
+        {k: (None if pd.isna(v) else v) for k, v in r.items()}
+        for r in records
+    ]
+
     with engine.begin() as conn:
-        for _, row in df.iterrows():
-            conn.execute(query, row.to_dict())
+        conn.execute(query, clean_records)
+
+        # Sincroniza a sequence do serial caso seja a tabela fato
+        if table == "fhuman_resources":
+            conn.execute(text("SELECT setval('fhuman_resources_fhumanresources_seq', COALESCE((SELECT MAX(fhumanresources) FROM fhuman_resources), 1))"))
+
         conn.execute(
             text("INSERT INTO dw_metadata (table_name, last_load_date, records_processed) VALUES (:table, :date, :records)"),
             {"table": table, "date": datetime.now(), "records": len(df)}
@@ -50,10 +68,10 @@ def read_and_convert(csv: str, table: str, engine) -> None:
         else:
             print(f"Nenhum registro novo para {table}")
     except Exception as e:
-        print(f"Houve um problema durante o carregamento de {csv} → {e}")
+        print(f"Houve um problema durante o carregamento de {csv} -> {e}")
 
 def load_tables() -> None:
-    engine = create_engine(DATABASE_CONNECTION)
+    engine = create_engine(DATABASE_URL)
 
     data_map = [
         ("ddate.csv", "ddate"),

@@ -55,7 +55,10 @@ def obter_last_load_date(table_name: str):
         password="DataWarehouse@2026!"
     )
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(last_load_date), '2000-01-01') FROM dw_metadata WHERE table_name = %s", (table_name,))
+    cur.execute(
+        "SELECT COALESCE(MAX(last_load_date), '2000-01-01'::timestamp) FROM dw_metadata WHERE table_name IN (%s, %s)",
+        (table_name, f"d{table_name}")
+    )
     last_date = cur.fetchone()[0]
     conn.close()
     return last_date
