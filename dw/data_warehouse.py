@@ -1,1 +1,0 @@
-# Responsável por reunir, organizar e armazenar grandes volumes de dados vindo de diferentes fontes

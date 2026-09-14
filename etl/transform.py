@@ -1,195 +1,109 @@
-"""
-import csv
-
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
-caminho_pasta_data = "../data/"
+caminho_pasta_data_bruto = Path(__file__).resolve().parent.parent / "data/bruto"
+caminho_pasta_data_transformado = Path(__file__).resolve().parent.parent / "data/transformado"
 
+# -------------------------
+# Dimensão Data
+# -------------------------
 ddate = pd.date_range(start="2006-01-01", end="2026-12-31")
 dimensao_data = pd.DataFrame({
-    "dateid": ddate.strftime("%Y%m%d"),
-    "fulldate": ddate.strftime("%Y-%m-%d"),
-    "day": ddate.day,
-    "month": ddate.month,
-    "year": ddate.year,
-    "semester": np.where(ddate.month <= 6, 1, 2)
+    "DateID": ddate.strftime("%Y%m%d").astype(int),
+    "FullDate": ddate.strftime("%Y-%m-%d"),
+    "Day": ddate.day,
+    "Month": ddate.month,
+    "Year": ddate.year,
+    "Semester": np.where(ddate.month <= 6, 1, 2)
 })
+dimensao_data.to_csv(caminho_pasta_data_transformado / "ddate.csv", index=False)
 
-dtime = pd.date_range(start="00:00:00", end="23:59:59", freq="s")
+# -------------------------
+# Dimensão Tempo
+# -------------------------
+dtime = pd.date_range(start="00:00:00", end="23:59:59", freq="min")
 dimensao_time = pd.DataFrame({
-    "timeid": dtime.strftime("%H%M%S"),
-    "fulltime": dtime.strftime("%H:%M:%S"),
-    "hour": dtime.hour,
-    "minute": dtime.minute,
-    "second": dtime.second
+    "TimeID": dtime.strftime("%H%M").astype(int),
+    "FullTime": dtime.strftime("%H:%M:%S"),
+    "Hour": dtime.hour,
+    "Minute": dtime.minute,
+    "Second": 0
 })
+dimensao_time.to_csv(caminho_pasta_data_transformado / "dtime.csv", index=False)
 
-print("--- Dimensão Data ---")
-print(dimensao_data.head())
-print(dimensao_data.info())
+# -------------------------
+# Carregar dados brutos
+# -------------------------
+ddepartment_raw = pd.read_csv(caminho_pasta_data_bruto / "department.csv")
+demployee_raw = pd.read_csv(caminho_pasta_data_bruto / "employee.csv")
+demployee_department_history = pd.read_csv(caminho_pasta_data_bruto / "employee_department_history.csv")
+demployee_pay_history = pd.read_csv(caminho_pasta_data_bruto / "employee_pay_history.csv")
+djobcandidate_raw = pd.read_csv(caminho_pasta_data_bruto / "job_candidate.csv")
+dshift_raw = pd.read_csv(caminho_pasta_data_bruto / "shift.csv")
 
-print("\n--- Dimensão Tempo ---")
-print(dimensao_time.head())
-
-ddepartment = pd.read_csv(caminho_pasta_data + "department.csv")
-demployee = pd.read_csv(caminho_pasta_data + "employee.csv")
-demployee_department_history = pd.read_csv(caminho_pasta_data + "employee_department_history.csv")
-demployee_pay_history = pd.read_csv(caminho_pasta_data + "employee_pay_history.csv")
-djobcandidate = pd.read_csv(caminho_pasta_data + "job_candidate.csv")
-dshift = pd.read_csv(caminho_pasta_data + "shift.csv")
-"""
-
-
-"""
-import numpy as np
-import pandas as pd
-
-caminho_pasta_data = "../data/"
-
-ddate = pd.date_range(start="2006-01-01", end="2026-12-31")
-dimensao_data = pd.DataFrame({
-    "dateid": ddate.strftime("%Y%m%d"),
-    "fulldate": ddate.strftime("%Y-%m-%d"),
-    "day": ddate.day,
-    "month": ddate.month,
-    "year": ddate.year,
-    "semester": np.where(ddate.month <= 6, 1, 2)
-})
-
-dtime = pd.date_range(start="00:00:00", end="23:59:59", freq="s")
-dimensao_time = pd.DataFrame({
-    "timeid": dtime.strftime("%H%M%S"),
-    "fulltime": dtime.strftime("%H:%M:%S"),
-    "hour": dtime.hour,
-    "minute": dtime.minute,
-    "second": dtime.second
-})
-
-ddepartment_raw = pd.read_csv(caminho_pasta_data + "department.csv")
-demployee_raw = pd.read_csv(caminho_pasta_data + "employee.csv")
-demployee_department_history = pd.read_csv(caminho_pasta_data + "employee_department_history.csv")
-demployee_pay_history = pd.read_csv(caminho_pasta_data + "employee_pay_history.csv")
-djobcandidate_raw = pd.read_csv(caminho_pasta_data + "job_candidate.csv")
-dshift_raw = pd.read_csv(caminho_pasta_data + "shift.csv")
-
+# -------------------------
+# Dimensão Departamento
+# -------------------------
 ddepartment = ddepartment_raw[['DepartmentID', 'Name', 'GroupName']].copy()
-ddepartment.columns = ['departmentid', 'name', 'groupname']
+ddepartment.to_csv(caminho_pasta_data_transformado / "ddepartment.csv", index=False)
 
+# -------------------------
+# Dimensão Employee
+# -------------------------
 demployee = demployee_raw[[
     'BusinessEntityID', 'NationalIDNumber', 'LoginID', 'OrganizationNode',
     'OrganizationLevel', 'JobTitle', 'MaritalStatus', 'Gender',
     'BirthDate', 'HireDate', 'SalariedFlag', 'CurrentFlag'
 ]].copy()
 demployee.columns = [
-    'employeeid', 'nationalidnumber', 'loginid', 'organizationnode',
-    'organizationlevel', 'jobtitle', 'maritalstatus', 'gender',
-    'birthdate', 'hiredate', 'salariedflag', 'currentflag'
-]
-
-dshift = dshift_raw[['ShiftID', 'Name', 'StartTime', 'EndTime']].copy()
-dshift.columns = ['shiftid', 'name', 'starttime', 'endtime']
-
-djob_candidate = djobcandidate_raw[['JobCandidateID', 'Resume']].copy()
-djob_candidate.columns = ['jobcandidateid', 'resume']
-
-demployee_pay_history['payhistoryid'] = range(1, len(demployee_pay_history) + 1)
-dpay_history = demployee_pay_history[['payhistoryid', 'PayFrequency']].copy()
-dpay_history.columns = ['payhistoryid', 'payfrequence']
-
-fhr = demployee_department_history.merge(demployee_pay_history, on='BusinessEntityID', how='left')
-fhr = fhr.merge(demployee_raw[['BusinessEntityID', 'VacationHours', 'SickLeaveHours']], on='BusinessEntityID', how='left')
-fhr = fhr.merge(djobcandidate_raw[['JobCandidateID', 'BusinessEntityID']], on='BusinessEntityID', how='left')
-
-fhr['fulldate'] = pd.to_datetime(fhr['StartDate']).dt.strftime('%Y%m%d')
-fhr['dateid'] = fhr['fulldate'].astype(int)
-
-fhuman_resources = pd.DataFrame({
-    'fhuman_resources': range(1, len(fhr) + 1),
-    'dateid': fhr['dateid'],
-    'timeid': 120000,  # ID padrão para horário (12:00:00)
-    'departmentid': fhr['DepartmentID'],
-    'employeeid': fhr['BusinessEntityID'],
-    'payhistoryid': fhr['payhistoryid'],
-    'shiftid': fhr['ShiftID'],
-    'jobcandidateid': fhr['JobCandidateID'].fillna(0).astype(int),
-    'rate': fhr['Rate'],
-    'vacationhours': fhr['VacationHours'],
-    'sickleavehours': fhr['SickLeaveHours']
-})
-
-print("Todas as tabelas dimensões e fatos foram processadas com sucesso.")
-
-"""
-
-import csv
-import numpy as np
-import pandas as pd
-
-caminho_pasta_data = "../data/"
-
-ddate = pd.date_range(start="2006-01-01", end="2026-12-31")
-dimensao_data = pd.DataFrame({
-    "fulldate": ddate.strftime("%Y-%m-%d"),
-    "day": ddate.day,
-    "month": ddate.month,
-    "year": ddate.year,
-    "semester": np.where(ddate.month <= 6, 1, 2)
-})
-
-dtime = pd.date_range(start="00:00:00", end="23:59:59", freq="s")
-dimensao_time = pd.DataFrame({
-    "hour": dtime.hour,
-    "minute": dtime.minute,
-    "second": dtime.second
-})
-
-ddepartment_raw = pd.read_csv(caminho_pasta_data + "department.csv")
-demployee_raw = pd.read_csv(caminho_pasta_data + "employee.csv")
-demployee_department_history = pd.read_csv(caminho_pasta_data + "employee_department_history.csv")
-demployee_pay_history = pd.read_csv(caminho_pasta_data + "employee_pay_history.csv")
-djobcandidate_raw = pd.read_csv(caminho_pasta_data + "job_candidate.csv")
-dshift_raw = pd.read_csv(caminho_pasta_data + "shift.csv")
-
-ddepartment = ddepartment_raw[['DepartmentID', 'Name', 'GroupName']].copy()
-ddepartment.columns = ['departmentid', 'name', 'groupname']
-
-demployee = demployee_raw[[
-    'BusinessEntityID', 'NationalIDNumber', 'LoginID', 'OrganizationNode',
+    'EmployeeID', 'NationalIDNumber', 'LoginID', 'OrganizationNode',
     'OrganizationLevel', 'JobTitle', 'MaritalStatus', 'Gender',
     'BirthDate', 'HireDate', 'SalariedFlag', 'CurrentFlag'
-]].copy()
-demployee.columns = [
-    'employeeid', 'nationalidnumber', 'loginid', 'organizationnode',
-    'organizationlevel', 'jobtitle', 'maritalstatus', 'gender',
-    'birthdate', 'hiredate', 'salariedflag', 'currentflag'
 ]
+demployee.to_csv(caminho_pasta_data_transformado / "demployee.csv", index=False)
 
+# -------------------------
+# Dimensão Shift
+# -------------------------
 dshift = dshift_raw[['ShiftID', 'Name', 'StartTime', 'EndTime']].copy()
-dshift.columns = ['shiftid', 'name', 'starttime', 'endtime']
+dshift.to_csv(caminho_pasta_data_transformado / "dshift.csv", index=False)
 
+# -------------------------
+# Dimensão Job Candidate
+# -------------------------
 djob_candidate = djobcandidate_raw[['JobCandidateID', 'Resume']].copy()
-djob_candidate.columns = ['jobcandidateid', 'resume']
+djob_candidate.to_csv(caminho_pasta_data_transformado / "djob_candidate.csv", index=False)
 
-demployee_pay_history['payhistoryid'] = range(1, len(demployee_pay_history) + 1)
-dpay_history = demployee_pay_history[['payhistoryid', 'PayFrequency']].copy()
-dpay_history.columns = ['payhistoryid', 'payfrequence']
+# -------------------------
+# Dimensão Pay History
+# -------------------------
+demployee_pay_history['PayHistoryID'] = range(1, len(demployee_pay_history) + 1)
+dpay_history = demployee_pay_history[['PayHistoryID', 'PayFrequency']].copy()
+dpay_history.columns = ['PayHistoryID', 'PayFrequence']
+dpay_history.to_csv(caminho_pasta_data_transformado / "dpay_history.csv", index=False)
 
+# -------------------------
+# Fato Human Resources
+# -------------------------
 fhr = demployee_department_history.merge(demployee_pay_history, on='BusinessEntityID', how='left')
 fhr = fhr.merge(demployee_raw[['BusinessEntityID', 'VacationHours', 'SickLeaveHours']], on='BusinessEntityID', how='left')
 fhr = fhr.merge(djobcandidate_raw[['JobCandidateID', 'BusinessEntityID']], on='BusinessEntityID', how='left')
-fhr['start_date_formatted'] = pd.to_datetime(fhr['StartDate']).dt.strftime('%Y-%m-%d')
+
+fhr['DateID'] = pd.to_datetime(fhr['StartDate']).dt.strftime('%Y%m%d').astype(int)
 
 fhuman_resources = pd.DataFrame({
-    'start_date_formatted': fhr['start_date_formatted'],
-    'departmentid': fhr['DepartmentID'],
-    'employeeid': fhr['BusinessEntityID'],
-    'payhistoryid': fhr['payhistoryid'],
-    'shiftid': fhr['ShiftID'],
-    'jobcandidateid': fhr['JobCandidateID'].replace({np.nan: None}),
-    'rate': fhr['Rate'],
-    'vacationhours': fhr['VacationHours'],
-    'sickleavehours': fhr['SickLeaveHours']
+    'DateID': fhr['DateID'],
+    'TimeID': 1200,
+    'DepartmentID': fhr['DepartmentID'],
+    'EmployeeID': fhr['BusinessEntityID'],
+    'PayHistoryID': fhr['PayHistoryID'],
+    'ShiftID': fhr['ShiftID'],
+    'JobCandidateID': fhr['JobCandidateID'].fillna(0).astype(int),
+    'Rate': fhr['Rate'],
+    'VacationHours': fhr['VacationHours'],
+    'SickLeaveHours': fhr['SickLeaveHours']
 })
+fhuman_resources.to_csv(caminho_pasta_data_transformado / "fhuman_resources.csv", index=False)
 
-print("Todas as tabelas dimensões e fatos foram processadas com sucesso e estão em conformidade com o DW.")
+print("Transform incremental concluído: dimensões e fatos salvos em CSV.")
